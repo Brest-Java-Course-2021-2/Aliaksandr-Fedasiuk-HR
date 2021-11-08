@@ -1,0 +1,14 @@
+version: '2'
+services:
+  oracle-xe:
+    image: oracle/database:18.4.0-xe
+    volumes:
+      - ~/oracle/volumes/xedb/oradata/:/opt/oracle/oradata/
+      - ~/oracle/volumes/xedb/scripts/setup:/opt/oracle/scripts/setup/
+      - ~/oracle/volumes/xedb/scripts/startup:/opt/oracle/scripts/startup
+    environment:
+      - ORACLE_PWD=manager
+      - ORACLE_CHARACTERSET=AL32UTF8
+    ports:
+      - 51521:1521
+      - 55500:5500
