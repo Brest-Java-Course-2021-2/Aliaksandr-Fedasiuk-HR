@@ -17,8 +17,8 @@ public class DepartmentDaoJDBCImpl implements DepartmentDao {
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private final String SQL_ALL_DEPARTMENTS="select d.departmentId, d.departmentName from department d order by d.departmentName";
-    private final String SQL_CREATE_DEPARTMENT="insert into department(departmentName) values(:departmentName)";
+    private final String SQL_ALL_DEPARTMENTS="select d.department_id, d.department_name from department d order by d.department_name";
+    private final String SQL_CREATE_DEPARTMENT="insert into department(department_name) values(:departmentName)";
 
     public DepartmentDaoJDBCImpl(DataSource dataSource) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
@@ -56,8 +56,8 @@ public class DepartmentDaoJDBCImpl implements DepartmentDao {
         @Override
         public Department mapRow(ResultSet resultSet, int i) throws SQLException {
             Department department = new Department();
-            department.setDepartmentId(resultSet.getInt("departmentId"));
-            department.setDepartmentName(resultSet.getString("departmentName"));
+            department.setDepartmentId(resultSet.getInt("department_id"));
+            department.setDepartmentName(resultSet.getString("department_name"));
             return department;
         }
     }

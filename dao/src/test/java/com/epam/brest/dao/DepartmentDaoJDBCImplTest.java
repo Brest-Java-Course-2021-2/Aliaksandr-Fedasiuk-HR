@@ -31,7 +31,7 @@ class DepartmentDaoJDBCImplTest {
     void create() {
         assertNotNull(departmentDaoJDBC);
         int departmentsSizeBefore = departmentDaoJDBC.findAll().size();
-        Department department = new Department("SECURITY");
+        Department department = new Department("SECURITY 2");
         Integer newDepartmentId = departmentDaoJDBC.create(department);
         assertNotNull(newDepartmentId);
         assertEquals((int) departmentsSizeBefore, departmentDaoJDBC.findAll().size() - 1);
