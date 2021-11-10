@@ -13,11 +13,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = {"classpath*:test-db.xml", "classpath*:test-jdbc-conf.xml"})
-class DepartmentDaoJDBCImplTest {
+class DepartmentDaoJDBCImplIT {
 
     private DepartmentDaoJDBCImpl departmentDaoJDBC;
 
-    public DepartmentDaoJDBCImplTest(@Autowired DepartmentDao departmentDaoJDBC) {
+    public DepartmentDaoJDBCImplIT(@Autowired DepartmentDao departmentDaoJDBC) {
         this.departmentDaoJDBC = (DepartmentDaoJDBCImpl) departmentDaoJDBC;
     }
 
