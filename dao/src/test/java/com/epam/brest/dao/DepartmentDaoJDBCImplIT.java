@@ -1,6 +1,8 @@
 package com.epam.brest.dao;
 
 import com.epam.brest.model.Department;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class DepartmentDaoJDBCImplIT {
 
+    private final Logger logger = LogManager.getLogger(DepartmentDaoJDBCImplIT.class);
+
     private DepartmentDaoJDBCImpl departmentDaoJDBC;
 
     public DepartmentDaoJDBCImplIT(@Autowired DepartmentDao departmentDaoJDBC) {
@@ -24,6 +28,7 @@ class DepartmentDaoJDBCImplIT {
 
     @Test
     void findAll() {
+        logger.debug("Execute test: findAll()");
         assertNotNull(departmentDaoJDBC);
         assertNotNull(departmentDaoJDBC.findAll());
     }

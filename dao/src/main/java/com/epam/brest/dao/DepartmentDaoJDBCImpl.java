@@ -1,6 +1,8 @@
 package com.epam.brest.dao;
 
 import com.epam.brest.model.Department;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -15,6 +17,8 @@ import java.util.List;
 
 public class DepartmentDaoJDBCImpl implements DepartmentDao {
 
+    private final Logger logger = LogManager.getLogger(DepartmentDaoJDBCImpl.class);
+
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private final String SQL_ALL_DEPARTMENTS="select d.department_id, d.department_name from department d order by d.department_name";
@@ -26,11 +30,13 @@ public class DepartmentDaoJDBCImpl implements DepartmentDao {
 
     @Override
     public List<Department> findAll() {
+        logger.debug("Start: findAll()");
         return namedParameterJdbcTemplate.query(SQL_ALL_DEPARTMENTS, new DepartmentRowMapper());
     }
 
     @Override
     public Integer create(Department department) {
+        logger.debug("Start: create({})", department);
 
         //TODO: isDepartmentUnique throw new IllegalArgumentException
 
