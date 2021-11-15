@@ -1,18 +1,29 @@
 package com.epam.brest.web_app;
 
+import com.epam.brest.model.Department;
 import com.epam.brest.service.DepartmentDtoService;
+import com.epam.brest.service.DepartmentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class DepartmentController {
 
+    private static final Logger logger = LoggerFactory.getLogger(DepartmentController.class);
+
     private final DepartmentDtoService departmentDtoService;
 
-    public DepartmentController(DepartmentDtoService departmentDtoService) {
+    private final DepartmentService departmentService;
+
+    public DepartmentController(DepartmentDtoService departmentDtoService,
+                                DepartmentService departmentService) {
         this.departmentDtoService = departmentDtoService;
+        this.departmentService = departmentService;
     }
 
     /**
@@ -41,8 +52,25 @@ public class DepartmentController {
      *
      * @return view name
      */
-    @GetMapping(value = "/department/add")
+    @GetMapping(value = "/department")
     public final String gotoAddDepartmentPage(Model model) {
+        logger.debug("gotoAddDepartmentPage({})", model);
+        model.addAttribute("isNew", true);
+        model.addAttribute("department", new Department());
         return "department";
+    }
+
+    /**
+     * Persist new department into persistence storage.
+     *
+     * @param department new department with filled data.
+     * @return view name
+     */
+    @PostMapping(value = "/department")
+    public String addDepartment(Department department) {
+
+        logger.debug("addDepartment({}, {})", department);
+        this.departmentService.create(department);
+        return "redirect:/departments";
     }
 }

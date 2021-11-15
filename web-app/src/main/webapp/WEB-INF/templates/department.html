@@ -47,7 +47,8 @@
                     <i class="bi-arrow-left"></i></a>
             </li>
         </ul>
-        <span class="navbar-brand text-uppercase me-auto">Edit department</span>
+        <span class="navbar-brand text-uppercase me-auto"
+              th:text="${isNew} ? 'New department' : 'Edit department'">Edit department</span>
     </nav>
 </header>
 
@@ -57,13 +58,23 @@
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <form>
+                        <form id="departmentForm"
+                              th:object="${department}"
+                              action="departments.html"
+                              th:action="@{${#httpServletRequest.servletPath}}"
+                              th:method="@{post}">
+
+                            <input id="field_departmentId"
+                                   type="hidden"
+                                   th:field="*{departmentId}"/>
+
                             <div class="mb-3">
                                 <label class="form-label"
                                        for="field_departmentName">Department Name</label>
                                 <input class="form-control "
                                        id="field_departmentName"
-                                       type="text" value="CEO"/>
+                                       type="text" value="CEO"
+                                       th:field="*{departmentName}"/>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label"
@@ -79,6 +90,7 @@
                                    title="Cancel">Cancel</a>
                                 <a href="departments.html"
                                    th:href="@{/departments}"
+                                   th:onclick="@{document.forms['departmentForm'].submit(); return false;}"
                                    class="btn btn-primary"
                                    title="Save department">Save</a>
                             </div>
