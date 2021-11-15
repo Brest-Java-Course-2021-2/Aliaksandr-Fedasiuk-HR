@@ -14,4 +14,6 @@ public interface DepartmentDao {
 
     Integer delete(Integer departmentId);
 
+    Integer count();
+
 }

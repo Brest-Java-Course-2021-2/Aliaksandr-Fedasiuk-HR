@@ -28,8 +28,13 @@ public class DepartmentDaoJDBCImpl implements DepartmentDao {
 
     private final String SQL_CREATE_DEPARTMENT="insert into department(department_name) values(:departmentName)";
 
+    @Deprecated
     public DepartmentDaoJDBCImpl(DataSource dataSource) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    }
+
+    public DepartmentDaoJDBCImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     @Override
@@ -68,6 +73,13 @@ public class DepartmentDaoJDBCImpl implements DepartmentDao {
     @Override
     public Integer delete(Integer departmentId) {
         return null;
+    }
+
+    @Override
+    public Integer count() {
+        LOGGER.debug("count()");
+        return namedParameterJdbcTemplate
+                .queryForObject("select count(*) from department", new MapSqlParameterSource(), Integer.class);
     }
 
     private class DepartmentRowMapper implements RowMapper<Department> {

@@ -11,7 +11,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = {"classpath*:test-db.xml", "classpath*:test-jdbc-conf.xml"})
@@ -37,11 +40,11 @@ class DepartmentDaoJDBCImplIT {
     @Test
     void create() {
         assertNotNull(departmentDaoJDBC);
-        int departmentsSizeBefore = departmentDaoJDBC.findAll().size();
+        int departmentsSizeBefore = departmentDaoJDBC.count();
         Department department = new Department("HR");
         Integer newDepartmentId = departmentDaoJDBC.create(department);
         assertNotNull(newDepartmentId);
-        assertEquals((int) departmentsSizeBefore, departmentDaoJDBC.findAll().size() - 1);
+        assertEquals((int) departmentsSizeBefore, departmentDaoJDBC.count() - 1);
     }
 
     @Test
@@ -55,4 +58,12 @@ class DepartmentDaoJDBCImplIT {
         });
     }
 
+    @Test
+    void shouldCount() {
+        assertNotNull(departmentDaoJDBC);
+        Integer quantity = departmentDaoJDBC.count();
+        assertNotNull(quantity);
+        assertTrue(quantity > 0);
+        assertEquals(Integer.valueOf(3), quantity);
+    }
 }
