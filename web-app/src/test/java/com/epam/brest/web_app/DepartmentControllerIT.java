@@ -2,6 +2,7 @@ package com.epam.brest.web_app;
 
 import com.epam.brest.model.Department;
 import com.epam.brest.service.DepartmentService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
 
+import static com.epam.brest.model.constants.DepartmentConstants.DEPARTMENT_NAME_SIZE;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasProperty;
@@ -105,5 +107,36 @@ class DepartmentControllerIT {
 
         // VERIFY
         assertEquals(departmentsSizeBefore, departmentService.count() - 1);
+    }
+
+    @Test
+    public void shouldOpenEditDepartmentPageById() throws Exception {
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/department/1")
+                ).andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType("text/html;charset=UTF-8"))
+                .andExpect(view().name("department"))
+                .andExpect(model().attribute("isNew", is(false)))
+                .andExpect(model().attribute("department", hasProperty("departmentId", is(1))))
+                .andExpect(model().attribute("department", hasProperty("departmentName", is("IT"))));
+    }
+
+    @Test
+    public void shouldUpdateDepartmentAfterEdit() throws Exception {
+
+        String testName = RandomStringUtils.randomAlphabetic(DEPARTMENT_NAME_SIZE);
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post("/department/1")
+                                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                                .param("departmentId", "1")
+                                .param("departmentName", testName)
+                ).andExpect(status().isFound())
+                .andExpect(view().name("redirect:/departments"))
+                .andExpect(redirectedUrl("/departments"));
+
+        Department department = departmentService.getDepartmentById(1);
+        assertNotNull(department);
+        assertEquals(testName, department.getDepartmentName());
     }
 }

@@ -44,6 +44,9 @@ public class DepartmentController {
      */
     @GetMapping(value = "/department/{id}")
     public final String gotoEditDepartmentPage(@PathVariable Integer id, Model model) {
+        logger.debug("gotoEditDepartmentPage(id:{},model:{})", id, model);
+        model.addAttribute("isNew", false);
+        model.addAttribute("department", departmentService.getDepartmentById(id));
         return "department";
     }
 
@@ -71,6 +74,20 @@ public class DepartmentController {
 
         logger.debug("addDepartment({}, {})", department);
         this.departmentService.create(department);
+        return "redirect:/departments";
+    }
+
+    /**
+     * Update department.
+     *
+     * @param department department with filled data.
+     * @return view name
+     */
+    @PostMapping(value = "/department/{id}")
+    public String updateDepartment(Department department) {
+
+        logger.debug("updateDepartment({}, {})", department);
+        this.departmentService.update(department);
         return "redirect:/departments";
     }
 }

@@ -20,10 +20,27 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    public Department getDepartmentById(Integer departmentId) {
+        logger.debug("Get department by id = {}", departmentId);
+        return this.departmentDao.getDepartmentById(departmentId);
+    }
+
+    @Override
     @Transactional
     public Integer create(Department department) {
         logger.debug("create({})", department);
         return this.departmentDao.create(department);
+    }
+
+    @Override
+    public Integer update(Department department) {
+        logger.debug("update({})", department);
+        return this.departmentDao.update(department);
+    }
+
+    @Override
+    public Integer delete(Integer departmentId) {
+        return null;
     }
 
     @Override
