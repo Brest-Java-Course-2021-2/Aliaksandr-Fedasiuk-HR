@@ -3,6 +3,7 @@ package com.epam.brest.web_app;
 import com.epam.brest.model.Department;
 import com.epam.brest.service.DepartmentService;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -138,5 +139,21 @@ class DepartmentControllerIT {
         Department department = departmentService.getDepartmentById(1);
         assertNotNull(department);
         assertEquals(testName, department.getDepartmentName());
+    }
+
+    @Test
+    public void shouldDeleteDepartment() throws Exception {
+
+        Integer countBefore = departmentService.count();
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/department/3/delete")
+                ).andExpect(status().isFound())
+                .andExpect(view().name("redirect:/departments"))
+                .andExpect(redirectedUrl("/departments"));
+
+        // verify database size
+        Integer countAfter = departmentService.count();
+        Assertions.assertEquals(countBefore - 1, countAfter);
     }
 }

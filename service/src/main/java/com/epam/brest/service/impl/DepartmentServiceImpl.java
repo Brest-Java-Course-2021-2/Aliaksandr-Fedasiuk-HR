@@ -40,7 +40,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Integer delete(Integer departmentId) {
-        return null;
+        logger.debug("delete department with id = {}", departmentId);
+        return this.departmentDao.delete(departmentId);
     }
 
     @Override
