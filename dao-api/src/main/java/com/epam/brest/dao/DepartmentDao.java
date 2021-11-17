@@ -8,6 +8,8 @@ public interface DepartmentDao {
 
     List<Department> findAll();
 
+    Department getDepartmentById(Integer departmentId);
+
     Integer create(Department department);
 
     Integer update(Department department);

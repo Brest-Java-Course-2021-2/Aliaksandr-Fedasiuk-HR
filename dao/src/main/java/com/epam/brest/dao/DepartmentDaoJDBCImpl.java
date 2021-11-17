@@ -21,12 +21,24 @@ public class DepartmentDaoJDBCImpl implements DepartmentDao {
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private final String SQL_ALL_DEPARTMENTS="select d.department_id, d.department_name from department d order by d.department_name";
+    public static final String SELECT_COUNT_FROM_DEPARTMENT = "select count(*) from department";
 
-    private final String SQL_CHECK_UNIQUE_DEPARTMENT_NAME="select count(d.department_name) " +
+    private final String SQL_ALL_DEPARTMENTS =
+            "select d.department_id, d.department_name from department d order by d.department_name";
+
+    private final String SQL_DEPARTMENT_BY_ID = "select d.department_id, d.department_name from department d " +
+            " where department_id = :departmentId";
+
+    private final String SQL_CHECK_UNIQUE_DEPARTMENT_NAME = "select count(d.department_name) " +
             "from department d where lower(d.department_name) = lower(:departmentName)";
 
-    private final String SQL_CREATE_DEPARTMENT="insert into department(department_name) values(:departmentName)";
+    private final String SQL_CREATE_DEPARTMENT =
+            "insert into department(department_name) values(:departmentName)";
+
+    private final String SQL_UPDATE_DEPARTMENT_NAME = "update department set department_name = :departmentName " +
+            "where department_id = :departmentId";
+
+    private final String SQL_DELETE_DEPARTMENT_BY_ID = "delete from department where department_id = :departmentId";
 
     @Deprecated
     public DepartmentDaoJDBCImpl(DataSource dataSource) {
@@ -44,8 +56,16 @@ public class DepartmentDaoJDBCImpl implements DepartmentDao {
     }
 
     @Override
+    public Department getDepartmentById(Integer departmentId) {
+        LOGGER.debug("Get department by id = {}", departmentId);
+        SqlParameterSource sqlParameterSource =
+                new MapSqlParameterSource("departmentId", departmentId);
+        return namedParameterJdbcTemplate.queryForObject(SQL_DEPARTMENT_BY_ID, sqlParameterSource, new DepartmentRowMapper());
+    }
+
+    @Override
     public Integer create(Department department) {
-        LOGGER.debug("Start: create({})", department);
+        LOGGER.debug("Create department: {}", department);
 
         if (!isDepartmentUnique(department.getDepartmentName())) {
             LOGGER.warn("Department with the same name {} already exists.", department.getDepartmentName());
@@ -67,19 +87,25 @@ public class DepartmentDaoJDBCImpl implements DepartmentDao {
 
     @Override
     public Integer update(Department department) {
-        return null;
+        LOGGER.debug("Update department: {}", department);
+        SqlParameterSource sqlParameterSource =
+                new MapSqlParameterSource("departmentName", department.getDepartmentName())
+                        .addValue("departmentId", department.getDepartmentId());
+        return namedParameterJdbcTemplate.update(SQL_UPDATE_DEPARTMENT_NAME, sqlParameterSource);
     }
 
     @Override
     public Integer delete(Integer departmentId) {
-        return null;
+        SqlParameterSource sqlParameterSource =
+                new MapSqlParameterSource("departmentId", departmentId);
+        return namedParameterJdbcTemplate.update(SQL_DELETE_DEPARTMENT_BY_ID, sqlParameterSource);
     }
 
     @Override
     public Integer count() {
         LOGGER.debug("count()");
         return namedParameterJdbcTemplate
-                .queryForObject("select count(*) from department", new MapSqlParameterSource(), Integer.class);
+                .queryForObject(SELECT_COUNT_FROM_DEPARTMENT, new MapSqlParameterSource(), Integer.class);
     }
 
     private class DepartmentRowMapper implements RowMapper<Department> {

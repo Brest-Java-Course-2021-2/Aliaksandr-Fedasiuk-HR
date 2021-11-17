@@ -11,6 +11,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -56,6 +58,44 @@ class DepartmentDaoJDBCImplIT {
             departmentDaoJDBC.create(department);
             departmentDaoJDBC.create(department);
         });
+    }
+
+    @Test
+    void getDepartmentById() {
+        List<Department> departments = departmentDaoJDBC.findAll();
+        if (departments.size() == 0) {
+            departmentDaoJDBC.create(new Department("TEST DEPARTMENT"));
+            departments = departmentDaoJDBC.findAll();
+        }
+
+        Department departmentSrc = departments.get(0);
+        Department departmentDst = departmentDaoJDBC.getDepartmentById(departmentSrc.getDepartmentId());
+        assertEquals(departmentSrc.getDepartmentName(), departmentDst.getDepartmentName());
+    }
+
+    @Test
+    void updateDepartment() {
+        List<Department> departments = departmentDaoJDBC.findAll();
+        if (departments.size() == 0) {
+            departmentDaoJDBC.create(new Department("TEST DEPARTMENT"));
+            departments = departmentDaoJDBC.findAll();
+        }
+
+        Department departmentSrc = departments.get(0);
+        departmentSrc.setDepartmentName(departmentSrc.getDepartmentName() + "_TEST");
+        departmentDaoJDBC.update(departmentSrc);
+
+        Department departmentDst = departmentDaoJDBC.getDepartmentById(departmentSrc.getDepartmentId());
+        assertEquals(departmentSrc.getDepartmentName(), departmentDst.getDepartmentName());
+    }
+
+    @Test
+    void deleteDepartment() {
+        departmentDaoJDBC.create(new Department("TEST DEPARTMENT"));
+        List<Department> departments = departmentDaoJDBC.findAll();
+
+        departmentDaoJDBC.delete(departments.get(departments.size() - 1).getDepartmentId());
+        assertEquals(departments.size() - 1, departmentDaoJDBC.findAll().size());
     }
 
     @Test
