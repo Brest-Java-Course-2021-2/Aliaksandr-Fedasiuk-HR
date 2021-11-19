@@ -40,6 +40,15 @@
         <constructor-arg name="departmentDao" ref="departmentDao"/>
     </bean>
 
+    <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath*:test-db.properties</value>
+                <value>classpath*:sql-department.properties</value>
+            </list>
+        </property>
+    </bean>
+
     <!-- Thymeleaf Template Resolver -->
     <bean id="templateResolver"
           class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
@@ -68,9 +77,9 @@
     </bean>
 
 
-    <bean class="com.epam.brest.web_app.MvcMappingExceptionResolver">
-        <property name="defaultErrorView" value="error"/>
-        <property name="exceptionAttribute" value="exception"/>
-        <property name="warnLogCategory" value="warn"/>
-    </bean>
+<!--    <bean class="com.epam.brest.web_app.MvcMappingExceptionResolver">-->
+<!--        <property name="defaultErrorView" value="error"/>-->
+<!--        <property name="exceptionAttribute" value="exception"/>-->
+<!--        <property name="warnLogCategory" value="warn"/>-->
+<!--    </bean>-->
 </beans>
