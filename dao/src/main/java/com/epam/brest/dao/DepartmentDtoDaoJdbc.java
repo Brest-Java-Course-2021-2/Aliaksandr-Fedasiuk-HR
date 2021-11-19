@@ -1,6 +1,7 @@
 package com.epam.brest.dao;
 
 import com.epam.brest.model.dto.DepartmentDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -15,19 +16,8 @@ public class DepartmentDtoDaoJdbc implements DepartmentDtoDao {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private String findAllWithAvgSalarySql = "SELECT\n" +
-            "\td.department_id AS departmentId,\n" +
-            "\td.department_name AS departmentName,\n" +
-            "\tavg(e.salary) AS avgSalary\n" +
-            "FROM\n" +
-            "\tdepartment d\n" +
-            "LEFT JOIN employee e ON\n" +
-            "\td.department_id = e.department_id\n" +
-            "GROUP BY\n" +
-            "\td.department_id,\n" +
-            "\td.department_name\n" +
-            "ORDER BY\n" +
-            "\tdepartment_name";
+    @Value("${findAllWithAvgSalarySql}")
+    private String findAllWithAvgSalarySql;
 
 
     public DepartmentDtoDaoJdbc(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {

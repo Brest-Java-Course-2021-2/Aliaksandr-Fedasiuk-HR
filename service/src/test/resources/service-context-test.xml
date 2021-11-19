@@ -23,4 +23,13 @@
     <bean id="departmentService" class="com.epam.brest.service.impl.DepartmentServiceImpl">
         <constructor-arg name="departmentDao" ref="departmentDao"/>
     </bean>
+
+    <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath*:test-db.properties</value>
+                <value>classpath*:sql-department.properties</value>
+            </list>
+        </property>
+    </bean>
 </beans>
