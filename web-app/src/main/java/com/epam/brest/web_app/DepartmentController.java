@@ -103,4 +103,6 @@ public class DepartmentController {
         departmentService.delete(id);
         return "redirect:/departments";
     }
+
+
 }
