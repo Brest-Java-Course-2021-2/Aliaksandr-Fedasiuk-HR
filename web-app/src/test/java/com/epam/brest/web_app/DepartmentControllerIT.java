@@ -85,7 +85,6 @@ class DepartmentControllerIT {
                 )));
     }
 
-
     @Test
     void shouldAddDepartment() throws Exception {
         // WHEN
@@ -108,6 +107,26 @@ class DepartmentControllerIT {
 
         // VERIFY
         assertEquals(departmentsSizeBefore, departmentService.count() - 1);
+    }
+
+    @Test
+    void shouldFailAddDepartmentOnEmptyName() throws Exception {
+        // WHEN
+        Department department = new Department("");
+
+        // THEN
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/department")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("departmentName", department.getDepartmentName())
+        ).andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("department"))
+                .andExpect(
+                        model().attributeHasFieldErrors(
+                                "department", "departmentName"
+                        )
+                );
     }
 
     @Test
