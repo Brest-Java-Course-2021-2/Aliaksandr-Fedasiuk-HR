@@ -11,3 +11,16 @@ This is sample 'Human Resources' web application.
 ```
 mvn clean install
 ```
+
+## Run integration tests:
+```
+mvn clean verify
+```
+
+## Run project information ( coverage, dependency, etc. ):
+```
+mvn site
+mvn site:stage
+
+open in browser: ${project}/target/staging/index.html
+```
