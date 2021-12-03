@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
+
 @RestController
 public class DepartmentController {
 
@@ -26,11 +28,19 @@ public class DepartmentController {
         this.departmentService = departmentService;
     }
 
+    @GetMapping(value = "/departments")
+    public final Collection<Department> departments() {
+
+        logger.debug("departments()");
+        return departmentService.findAll();
+    }
+
     @GetMapping(value = "/departments/{id}")
     public final Department getDepartmentById(@PathVariable Integer id) {
 
-        logger.debug("department()");
-        return departmentService.getDepartmentById(id);
+        logger.debug("getDepartmentById({})", id);
+        Department department = departmentService.getDepartmentById(id);
+        return department;
     }
 
     @PostMapping(path = "/departments", consumes = "application/json", produces = "application/json")

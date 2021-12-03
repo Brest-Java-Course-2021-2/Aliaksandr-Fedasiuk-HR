@@ -19,7 +19,7 @@ import java.util.List;
 @Component
 public class DepartmentDaoJDBCImpl implements DepartmentDao {
 
-    private final Logger LOGGER = LogManager.getLogger(DepartmentDaoJDBCImpl.class);
+    private final Logger logger = LogManager.getLogger(DepartmentDaoJDBCImpl.class);
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -50,13 +50,13 @@ public class DepartmentDaoJDBCImpl implements DepartmentDao {
 
     @Override
     public List<Department> findAll() {
-        LOGGER.debug("Start: findAll()");
+        logger.debug("Start: findAll()");
         return namedParameterJdbcTemplate.query(sqlGetAllDepartments, new DepartmentRowMapper());
     }
 
     @Override
     public Department getDepartmentById(Integer departmentId) {
-        LOGGER.debug("Get department by id = {}", departmentId);
+        logger.debug("Get department by id = {}", departmentId);
         SqlParameterSource sqlParameterSource =
                 new MapSqlParameterSource("departmentId", departmentId);
         return namedParameterJdbcTemplate.queryForObject(sqlGetDepartmentById, sqlParameterSource, new DepartmentRowMapper());
@@ -64,29 +64,29 @@ public class DepartmentDaoJDBCImpl implements DepartmentDao {
 
     @Override
     public Integer create(Department department) {
-        LOGGER.debug("Create department: {}", department);
+        logger.debug("Create department: {}", department);
 
         if (!isDepartmentUnique(department.getDepartmentName())) {
-            LOGGER.warn("Department with the same name {} already exists.", department.getDepartmentName());
+            logger.warn("Department with the same name {} already exists.", department.getDepartmentName());
             throw new IllegalArgumentException("Department with the same name already exists in DB.");
         }
 
         SqlParameterSource sqlParameterSource =
-                new MapSqlParameterSource("departmentName", department.getDepartmentName().toUpperCase());
+                new MapSqlParameterSource("departmentName", department.getDepartmentName());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         namedParameterJdbcTemplate.update(sqlCreateDepartment, sqlParameterSource, keyHolder);
         return (Integer) keyHolder.getKey();
     }
 
     private boolean isDepartmentUnique(String departmentName) {
-        LOGGER.debug("Check DepartmentName: {} on unique", departmentName);
+        logger.debug("Check DepartmentName: {} on unique", departmentName);
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource("departmentName", departmentName);
         return namedParameterJdbcTemplate.queryForObject(sqlCheckUniqueDepartmentName, sqlParameterSource, Integer.class) == 0;
     }
 
     @Override
     public Integer update(Department department) {
-        LOGGER.debug("Update department: {}", department);
+        logger.debug("Update department: {}", department);
         SqlParameterSource sqlParameterSource =
                 new MapSqlParameterSource("departmentName", department.getDepartmentName())
                         .addValue("departmentId", department.getDepartmentId());
@@ -102,7 +102,7 @@ public class DepartmentDaoJDBCImpl implements DepartmentDao {
 
     @Override
     public Integer count() {
-        LOGGER.debug("count()");
+        logger.debug("count()");
         return namedParameterJdbcTemplate
                 .queryForObject(sqlDepartmentCount, new MapSqlParameterSource(), Integer.class);
     }
