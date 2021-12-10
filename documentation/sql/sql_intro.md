@@ -14,6 +14,7 @@ java -jar h2-1.4.200.jar
 [SQL Grammar](www.h2database.com/html/grammar.html)
 
 ## Sample HR schema
+
 ```
 -- Schema HR
 drop table emp; 
@@ -44,6 +45,7 @@ CREATE TABLE emp (
 ```
 
 ## Sampla data
+
 ```
 INSERT INTO dept (dept_id, dept_name) VALUES (1, 'DEV');
 INSERT INTO dept (dept_id, dept_name) VALUES (2, 'ACCOUNTING');
@@ -65,6 +67,7 @@ INSERT INTO emp (firstname, lastname, dept_id, salary) VALUES ('Alex', 'Kyznecov
 COMMIT;
 ```
 
-## UI tool 
+## UI tool
+
 [Dbeaver](https://dbeaver.io/)
 

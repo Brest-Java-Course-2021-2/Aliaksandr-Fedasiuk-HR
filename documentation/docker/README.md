@@ -9,7 +9,8 @@ docker run --name xedb \
 -e ORACLE_CHARACTERSET=AL32UTF8 \
 oracle/database:18.4.0-xe
 ```
-or 
+
+or
 
 ```
 mkdir -p /home/myuser/oracle
