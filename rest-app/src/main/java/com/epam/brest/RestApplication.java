@@ -8,8 +8,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
+@PropertySource({"classpath:dao.properties"})
 public class RestApplication extends SpringBootServletInitializer {
 
     private static final Logger logger = LogManager.getLogger(RestApplication.class);
