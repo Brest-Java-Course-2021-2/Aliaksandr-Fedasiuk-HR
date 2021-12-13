@@ -43,9 +43,9 @@ export class DepartmentFormComponent implements OnInit {
     const department = {...this.department} as Department;
 
     if (department.departmentId) {
-      this.departmentService.updateDepartment(department);
+      this.departmentService.updateDepartment(department).subscribe();
     } else {
-      this.departmentService.createDepartment(department);
+      this.departmentService.createDepartment(department).subscribe();
     }
 
     this.onGoBack();
