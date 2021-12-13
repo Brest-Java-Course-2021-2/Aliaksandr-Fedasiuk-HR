@@ -1,0 +1,57 @@
+<header>
+  <nav id="main-header"
+       class="py-1 mb-3 navbar navbar-expand-sm navbar-light bg-light text-dark">
+    <ul class="navbar-nav float-lg-left">
+      <li class="nav-item" title="Back to list">
+        <a (click)="onGoBack()" class="btn btn-light btn-block">
+          <i class="bi-arrow-left"></i></a>
+      </li>
+    </ul>
+    <span class="navbar-brand text-uppercase me-auto">Edit department</span>
+  </nav>
+</header>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <form *ngIf="department" id="department-form">
+            <div class="mb-3">
+              <label class="form-label"
+                     for="field_departmentName">Department Name</label>
+              <input class="form-control "
+                     id="field_departmentName"
+                     name="departmentName"
+                     type="text"
+                     [(ngModel)]="department.departmentName"
+              />
+            </div>
+            <!--            <div class="mb-3">-->
+            <!--              <label class="form-label"-->
+            <!--                     for="field_description">Description</label>-->
+            <!--              <input class="form-control"-->
+            <!--                     id="field_description"-->
+            <!--                     name="description"-->
+            <!--                     type="text" value="CEO department">-->
+            <!--            </div>-->
+            <div class="d-flex justify-content-end">
+              <btn
+                type="button"
+                class="btn btn-light me-1"
+                (click)="onGoBack()"
+                title="Cancel">Cancel
+              </btn>
+              <btn type="submit"
+                   class="btn btn-primary"
+                   form="department-form"
+                   (click)="onSubmit()"
+                   title="Save department">Save
+              </btn>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
