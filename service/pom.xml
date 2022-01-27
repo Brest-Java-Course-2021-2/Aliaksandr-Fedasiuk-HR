@@ -2,64 +2,36 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>service</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>service</name>
+
     <parent>
-        <artifactId>hr</artifactId>
         <groupId>com.epam.brest</groupId>
+        <artifactId>hr</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>service</artifactId>
+    <modules>
+        <module>api</module>
+        <module>impl</module>
+    </modules>
 
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.epam.brest</groupId>
+                <artifactId>dao-impl</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.epam.brest</groupId>
-            <artifactId>model</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.epam.brest</groupId>
-            <artifactId>dao-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.epam.brest</groupId>
-            <artifactId>dao</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.epam.brest</groupId>
-            <artifactId>service-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.epam.brest</groupId>
-            <artifactId>test-db</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
-    </dependencies>
+            <dependency>
+                <groupId>com.epam.brest</groupId>
+                <artifactId>test-db</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

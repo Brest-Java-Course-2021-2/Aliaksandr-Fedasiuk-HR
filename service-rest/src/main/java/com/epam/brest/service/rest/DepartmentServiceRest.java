@@ -2,8 +2,8 @@ package com.epam.brest.service.rest;
 
 import com.epam.brest.model.Department;
 import com.epam.brest.service.DepartmentService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 public class DepartmentServiceRest implements DepartmentService {
 
-    private final Logger logger = LogManager.getLogger(DepartmentDtoServiceRest.class);
+    private final Logger logger = LoggerFactory.getLogger(DepartmentDtoServiceRest.class);
 
     private String url;
 

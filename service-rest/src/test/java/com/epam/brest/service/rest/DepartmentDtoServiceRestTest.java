@@ -3,11 +3,11 @@ package com.epam.brest.service.rest;
 import com.epam.brest.model.dto.DepartmentDto;
 import com.epam.brest.service.config.ServiceRestTestConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
@@ -33,7 +33,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 @Import({ServiceRestTestConfig.class})
 class DepartmentDtoServiceRestTest {
 
-    private final Logger logger = LogManager.getLogger(DepartmentDtoServiceRestTest.class);
+    private final Logger logger = LoggerFactory.getLogger(DepartmentDtoServiceRestTest.class);
 
     public static final String URL = "http://localhost:8088/department-dtos";
 
