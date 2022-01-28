@@ -24,10 +24,10 @@
         <module>model</module>
         <module>dao</module>
         <module>service</module>
-        <module>service-rest</module>
-        <module>rest-app</module>
+        <module>rest-client</module>
+        <module>rest-server</module>
         <module>web-app</module>
-        <module>test-db</module>
+        <module>db</module>
     </modules>
 
     <properties>

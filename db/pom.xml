@@ -3,10 +3,11 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>service</artifactId>
+    <artifactId>db</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>service</name>
+    <name>db</name>
+    <description>Different Spring configurations with the database</description>
 
     <parent>
         <groupId>com.epam.brest</groupId>
@@ -15,23 +16,12 @@
     </parent>
 
     <modules>
-        <module>api</module>
-        <module>impl</module>
+        <module>prod</module>
+        <module>test</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>com.epam.brest</groupId>
-                <artifactId>dao-impl</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.epam.brest</groupId>
-                <artifactId>db-test</artifactId>
-                <version>${project.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

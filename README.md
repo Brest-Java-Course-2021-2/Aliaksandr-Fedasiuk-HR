@@ -7,14 +7,23 @@ This is sample 'Human Resources' Spring boot web application.
 * JDK 11
 * Apache Maven
 
-## Build application:
+## Subprojects
+* [angular-app](./angular-app) - a web app based on NodeJs + Angular, uses [rest-server](./rest-app)
+* [dao](./dao) - a layer for working with one of the database instance from [db](./db)
+* [db](./db) - diff configurations (schema + init scripts) to up `prod|test` instance of the database
+* [documentation](./documentation) - a documentation
+* [model](./model) - todo: db + ui  
+  [rest-client](./rest-client) - spring beans based on `RestTemplate`
+* [rest-server](./rest-server) - a spring boot app (REST API)
+* [service](./service) - spring beans that use [dao](./dao) for direct connection to the database [db](./db)
+* [web-app](./web-app) - a spring boot app (UI) that uses REST API through [rest-client](./rest-client) 
 
+## Build application:
 ```
 mvn clean install
 ```
 
 To start Rest server:
-
 ```
 java -jar ./rest-app/target/rest-app-1.0-SNAPSHOT.jar
 ```
@@ -22,13 +31,10 @@ java -jar ./rest-app/target/rest-app-1.0-SNAPSHOT.jar
 ## Available REST endpoints
 
 ### version
-
 ```
 curl --request GET 'http://localhost:8088/version'
 ```
-
 ### department-dtos
-
 ```
 curl --request GET 'http://localhost:8088/department-dtos'
 ```
