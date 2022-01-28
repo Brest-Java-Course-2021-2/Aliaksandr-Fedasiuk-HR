@@ -9,12 +9,18 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>rest-app</artifactId>
+    <artifactId>rest-server</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.epam.brest</groupId>
             <artifactId>service-impl</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.epam.brest</groupId>
+            <artifactId>db-prod</artifactId>
             <version>${project.version}</version>
         </dependency>
 

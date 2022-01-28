@@ -42,7 +42,7 @@
         <!-- testing -->
         <dependency>
             <groupId>com.epam.brest</groupId>
-            <artifactId>test-db</artifactId>
+            <artifactId>db-test</artifactId>
             <scope>test</scope>
         </dependency>
 

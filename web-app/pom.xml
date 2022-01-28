@@ -17,7 +17,7 @@
 
         <dependency>
             <groupId>com.epam.brest</groupId>
-            <artifactId>service-rest</artifactId>
+            <artifactId>rest-client</artifactId>
             <version>${project.version}</version>
         </dependency>
 
