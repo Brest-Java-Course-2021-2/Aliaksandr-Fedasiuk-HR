@@ -13,7 +13,7 @@ This is sample 'Human Resources' Spring boot web application.
 * [db](./db) - diff configurations (schema + init scripts) to up `prod|test` instance of the database
 * [documentation](./documentation) - a documentation
 * [model](./model) - todo: db + ui  
-  [rest-client](./rest-client) - spring beans based on `RestTemplate`
+* [rest-client](./rest-client) - spring beans based on `RestTemplate`
 * [rest-server](./rest-server) - a spring boot app (REST API)
 * [service](./service) - spring beans that use [dao](./dao) for direct connection to the database [db](./db)
 * [web-app](./web-app) - a spring boot app (UI) that uses REST API through [rest-client](./rest-client) 
