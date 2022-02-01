@@ -83,7 +83,7 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>src/integration/java</source>
+                                <source>src/test-integration/java</source>
                             </sources>
                         </configuration>
                     </execution>
@@ -96,7 +96,7 @@
                         <configuration>
                             <resources>
                                 <resource>
-                                    <directory>src/integration/resources</directory>
+                                    <directory>src/test-integration/resources</directory>
                                     <targetPath>intergation</targetPath>
                                 </resource>
                             </resources>

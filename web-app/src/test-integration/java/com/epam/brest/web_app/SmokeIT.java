@@ -80,11 +80,11 @@ public class SmokeIT {
     void openHomeAndClickDepartment() throws Exception {
         emulateRestServer();
 
-        // 1. Home page
+        logger.info("1. Home page");
         final HtmlPage page = webClient.getPage("http://localhost/");
         final HtmlAnchor link = (HtmlAnchor) page.getByXPath("//a[@href='/department/123']").get(0);
 
-        // 2. Click on the department
+        logger.info("2. Click on the department");
         final HtmlPage detailsPage =  link.click();
         final HtmlTextInput departmentName = (HtmlTextInput) detailsPage.getElementById("field_departmentName");
 
