@@ -1,7 +1,7 @@
 package com.epam.brest.service.rest;
 
 import com.epam.brest.model.Department;
-import com.epam.brest.service.config.ServiceRestTestConfig;
+import com.epam.brest.service.config.RestClientConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,152 +10,162 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.epam.brest.model.constants.DepartmentConstants.DEPARTMENT_NAME_SIZE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.header;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
 @ExtendWith(SpringExtension.class)
-@Import({ServiceRestTestConfig.class})
+@Import({RestClientConfig.class, DepartmentServiceRest.class})
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class DepartmentServiceRestTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DepartmentServiceRestTest.class);
+    private final Logger logger = LoggerFactory.getLogger(DepartmentServiceRestTest.class);
 
-    public static final String DEPARTMENTS_URL = "http://localhost:8088/departments";
-
-    @Autowired
-    RestTemplate restTemplate;
+    @Value("${rest.server}")
+    private String restServer;
 
     private MockRestServiceServer mockServer;
 
-    private ObjectMapper mapper = new ObjectMapper();
-
-    DepartmentServiceRest departmentService;
+    @Autowired
+    private DepartmentServiceRest departmentService;
 
     @BeforeEach
     public void before() {
+        // we have to use the same RestTemplate
+        final RestTemplate restTemplate = (RestTemplate) ReflectionTestUtils.getField(departmentService, "restTemplate");
         mockServer = MockRestServiceServer.createServer(restTemplate);
-        departmentService = new DepartmentServiceRest(DEPARTMENTS_URL, restTemplate);
     }
 
     @Test
     public void shouldFindAllDepartments() throws Exception {
+        logger.debug("shouldFindAllDepartments()");
 
-        LOGGER.debug("shouldFindAllDepartments()");
         // given
-        mockServer.expect(ExpectedCount.once(), requestTo(new URI(DEPARTMENTS_URL)))
+        mockServer.expect(ExpectedCount.once(), requestTo(new URI(String.format("%s/departments", restServer))))
                 .andExpect(method(HttpMethod.GET))
+                .andExpect(header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(header(HttpHeaders.ACCEPT, "application/json, application/*+json"))
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(mapper.writeValueAsString(Arrays.asList(create(0), create(1))))
+                        .body("[{\"departmentId\":0,\"departmentName\":\"d0\"}," +
+                                "{\"departmentId\":1,\"departmentName\":\"d1\"}]")
                 );
 
         // when
-        List<Department> departments = departmentService.findAll();
+        final List<Department> departments = departmentService.findAll();
 
         // then
         mockServer.verify();
-        assertNotNull(departments);
-        assertTrue(departments.size() > 0);
+        assertEquals("[{departmentId=0, departmentName=d0}, {departmentId=1, departmentName=d1}]",
+                departments.toString());
     }
 
     @Test
     public void shouldCreateDepartment() throws Exception {
+        logger.debug("shouldCreateDepartment()");
 
-        LOGGER.debug("shouldCreateDepartment()");
         // given
-        Department department = new Department()
+        final Department department = new Department()
                 .setDepartmentName(RandomStringUtils.randomAlphabetic(DEPARTMENT_NAME_SIZE));
 
-        mockServer.expect(ExpectedCount.once(), requestTo(new URI(DEPARTMENTS_URL)))
+        mockServer.expect(ExpectedCount.once(), requestTo(new URI(String.format("%s/departments", restServer))))
                 .andExpect(method(HttpMethod.POST))
+                .andExpect(header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(header(HttpHeaders.ACCEPT, "application/json, application/*+json"))
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(mapper.writeValueAsString("1"))
+                        .body("1")
                 );
         // when
-        Integer id = departmentService.create(department);
+        final Integer id = departmentService.create(department);
 
         // then
         mockServer.verify();
-        assertNotNull(id);
+        assertEquals(1, id);
     }
 
     @Test
     public void shouldFindDepartmentById() throws Exception {
-
         // given
-        Integer id = 1;
-        Department department = new Department()
-                .setDepartmentId(id)
-                .setDepartmentName(RandomStringUtils.randomAlphabetic(DEPARTMENT_NAME_SIZE));
+        final String name = RandomStringUtils.randomAlphabetic(DEPARTMENT_NAME_SIZE);
+        final Department department = new Department()
+                .setDepartmentId(1)
+                .setDepartmentName(name);
 
-        mockServer.expect(ExpectedCount.once(), requestTo(new URI(DEPARTMENTS_URL + "/" + id)))
+        mockServer.expect(ExpectedCount.once(), requestTo(new URI(String.format("%s/departments/1", restServer))))
                 .andExpect(method(HttpMethod.GET))
+                .andExpect(header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(header(HttpHeaders.ACCEPT, "application/json, application/*+json"))
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(mapper.writeValueAsString(department))
+                        .body(String.format("{\"departmentId\":1,\"departmentName\":\"%s\"}", name))
                 );
 
         // when
-        Department resultDepartment = departmentService.getDepartmentById(id);
+        final Department resultDepartment = departmentService.getDepartmentById(1);
 
         // then
         mockServer.verify();
         assertNotNull(resultDepartment);
-        assertEquals(resultDepartment.getDepartmentId(), id);
-        assertEquals(resultDepartment.getDepartmentName(), department.getDepartmentName());
+        assertEquals(1, resultDepartment.getDepartmentId());
+        assertEquals(name, resultDepartment.getDepartmentName());
     }
 
     @Test
     public void shouldUpdateDepartment() throws Exception {
 
         // given
-        Integer id = 1;
-        Department department = new Department()
-                .setDepartmentId(id)
+        final Department department = new Department()
+                .setDepartmentId(1)
                 .setDepartmentName(RandomStringUtils.randomAlphabetic(DEPARTMENT_NAME_SIZE));
 
-        mockServer.expect(ExpectedCount.once(), requestTo(new URI(DEPARTMENTS_URL)))
+        mockServer.expect(ExpectedCount.once(), requestTo(new URI(String.format("%s/departments", restServer))))
                 .andExpect(method(HttpMethod.PUT))
+                .andExpect(header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(header(HttpHeaders.ACCEPT, "application/json, application/*+json"))
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(mapper.writeValueAsString("1"))
+                        .body(new ObjectMapper().writeValueAsString("1"))
                 );
 
-        mockServer.expect(ExpectedCount.once(), requestTo(new URI(DEPARTMENTS_URL + "/" + id)))
+        mockServer.expect(ExpectedCount.once(), requestTo(new URI(String.format("%s/departments/1", restServer))))
+                .andExpect(header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(header(HttpHeaders.ACCEPT, "application/json, application/*+json"))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(mapper.writeValueAsString(department))
+                        .body(new ObjectMapper().writeValueAsString(department))
                 );
 
         // when
-        int result = departmentService.update(department);
-        Department updatedDepartment = departmentService.getDepartmentById(id);
+        final int result = departmentService.update(department);
+        final Department updatedDepartment = departmentService.getDepartmentById(1);
 
         // then
         mockServer.verify();
-        assertTrue(1 == result);
+        assertEquals(1, result);
 
         assertNotNull(updatedDepartment);
-        assertEquals(updatedDepartment.getDepartmentId(), id);
+        assertEquals(1, updatedDepartment.getDepartmentId());
         assertEquals(updatedDepartment.getDepartmentName(), department.getDepartmentName());
     }
 
@@ -163,26 +173,19 @@ public class DepartmentServiceRestTest {
     public void shouldDeleteDepartment() throws Exception {
 
         // given
-        Integer id = 1;
-        mockServer.expect(ExpectedCount.once(), requestTo(new URI(DEPARTMENTS_URL + "/" + id)))
+        mockServer.expect(ExpectedCount.once(), requestTo(new URI(String.format("%s/departments/1", restServer))))
                 .andExpect(method(HttpMethod.DELETE))
+                .andExpect(header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(header(HttpHeaders.ACCEPT, "application/json, application/*+json"))
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(mapper.writeValueAsString("1"))
+                        .body("1")
                 );
         // when
-        int result = departmentService.delete(id);
+        int result = departmentService.delete(1);
 
         // then
         mockServer.verify();
-        assertTrue(1 == result);
-    }
-
-    private Department create(int index) {
-        Department department = new Department();
-        department.setDepartmentId(index);
-        department.setDepartmentName("d" + index);
-        return department;
+        assertEquals(1, result);
     }
 }
-
