@@ -5,7 +5,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan(value = "com.epam.brest.*")
+@ComponentScan(value = "com.epam.brest.service.*")
 public class ApplicationConfig {
 
     @Value("${rest.server.protocol}")
